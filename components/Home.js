@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Text, StyleSheet } from 'react-native';
+import { View, FlatList, Text, StyleSheet, Button } from 'react-native';
 import axios from 'axios';
+
 
 // Components
 import Card from './Card';
 
-const Home = () => {
+const Home = ({ navigation }) => {
+
+
     const [data, setData] = useState([]);
     const [pokemonList, setPokemonList] = useState([]);
 
@@ -38,7 +41,7 @@ const Home = () => {
                 data={pokemonList}
                 numColumns={2}
                 renderItem={({ item }) =>
-                    <Card pokemon={item.pokemon_species} id={item.entry_number} />}
+                    <Card pokemon={item.pokemon_species} id={item.entry_number} navigation={navigation} />}
             />
         </View>
     );
