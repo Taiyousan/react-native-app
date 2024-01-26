@@ -16,13 +16,14 @@ const Home = ({ navigation }) => {
         container: {
             margin: 0,
             width: '100%',
-            flex: 1,
+            // flex: 1,
         },
     });
 
     // get API
     const getLists = async () => {
         try {
+            // debugger;
             const response = await axios.get('https://pokeapi.co/api/v2/pokedex/1');
             setData(response.data);
             setPokemonList(response.data.pokemon_entries);

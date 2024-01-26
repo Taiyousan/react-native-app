@@ -8,6 +8,7 @@ import axios from 'axios';
 
 const Details = ({ route, navigation }) => {
     const { name, id } = route.params;
+    const [pokemon, setPokemon] = useState([]);
 
 
     const styles = StyleSheet.create({
@@ -17,32 +18,54 @@ const Details = ({ route, navigation }) => {
             flex: 1,
         },
         name: {
+            fontSize: 50,
+            fontWeight: 'bold',
+            color: '#252525',
+            width: '100%',
+            textAlign: 'center',
+            padding: 20,
+            textTransform: 'capitalize'
+        },
+        flexContainer: {
+            justifyContent: 'center', // Alignement vertical au centre
+            alignItems: 'center',
+        },
+        order: {
             fontSize: 20,
             fontWeight: 'bold',
-            color: 'green',
-        }
+            color: '#fff',
+            backgroundColor: '#252525',
+            textTransform: 'capitalize',
+            padding: 10,
+            borderRadius: 50,
+            height: 50,
+            width: 50,
+            textAlign: 'center',
+        },
     });
 
-    const [data, setData] = useState([]);
     // get API
-    const getLists = async () => {
+    const getPokemonDetail = async () => {
         try {
             const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
-            setData(response.data);
+            setPokemon(response.data);
         } catch (error) {
             console.error(error);
         }
     }
 
     useEffect(() => {
-        getLists();
+        getPokemonDetail();
     }, []);
+
+
+
 
 
     return (
         <View style={styles.container}>
-            <Text style={styles.name}>{data.name}</Text>
-            <Text>{data.order}</Text>
+            <Text style={styles.name}>{pokemon.name}</Text>
+            <View style={styles.flexContainer}><Text style={styles.order} >{pokemon.order}</Text></View>
         </View>
     );
 };
