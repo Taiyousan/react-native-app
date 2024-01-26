@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Text, Image, StyleSheet } from 'react-native';
+import { View, FlatList, Text, Image, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { useAppContext } from "../context/store";
 
-const Card = ({ pokemon, id }) => {
+
+const Card = ({ pokemon, id, navigation }) => {
+
+    const { currentPokemon, setCurrentPokemon } = useAppContext();
 
     const styles = StyleSheet.create({
         card: {
@@ -9,7 +13,7 @@ const Card = ({ pokemon, id }) => {
             fontSize: 18,
             backgroundColor: '#fafafa',
             borderColor: '#000000',
-            borderWidth: 1,
+            borderWidth: 0,
             borderRadius: 5,
             height: 200,
             display: 'flex',
@@ -18,6 +22,15 @@ const Card = ({ pokemon, id }) => {
             justifyContent: 'center',
             flex: 1,
             margin: 10,
+            shadowColor: "#000",
+            shadowOffset: {
+                width: 0,
+                height: 1,
+            },
+            shadowOpacity: 0.18,
+            shadowRadius: 1.00,
+
+            elevation: 1,
         },
         img: {
             width: 100,
@@ -25,14 +38,21 @@ const Card = ({ pokemon, id }) => {
         },
     });
 
+    const handleCardClick = () => {
+        setCurrentPokemon(pokemon);
+        navigation.navigate('Accueil-Detail')
+    };
+
     return (
-        <View style={styles.card}>
-            <Text >{pokemon.name}</Text>
-            <Image
-                style={styles.img}
-                source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png` }}
-            />
-        </View>
+        <TouchableWithoutFeedback onPress={handleCardClick}>
+            <View style={styles.card}>
+                <Text>{pokemon.name}</Text>
+                <Image
+                    style={styles.img}
+                    source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png` }}
+                />
+            </View>
+        </TouchableWithoutFeedback>
     );
 };
 
