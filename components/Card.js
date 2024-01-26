@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, Image, StyleSheet, TouchableWithoutFeedback } from 'react-native';
-import { useAppContext } from "../context/store";
 
 
 const Card = ({ pokemon, id, navigation }) => {
 
-    const { currentPokemon, setCurrentPokemon } = useAppContext();
 
     const styles = StyleSheet.create({
         card: {
@@ -39,8 +37,12 @@ const Card = ({ pokemon, id, navigation }) => {
     });
 
     const handleCardClick = () => {
-        setCurrentPokemon(pokemon);
-        navigation.navigate('Accueil-Detail')
+        // setCurrentPokemon(pokemon);
+        navigation.navigate('Accueil-Detail',
+            {
+                name: pokemon.name,
+                id: id,
+            })
     };
 
     return (
