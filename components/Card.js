@@ -27,6 +27,18 @@ const Card = ({ id, navigation }) => {
 
             elevation: 1,
         },
+        order: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            fontSize: 10,
+            fontWeight: 'bold',
+            color: '#fff',
+            backgroundColor: '#252525',
+            padding: 10,
+            borderTopRightRadius: 5,
+            borderBottomRightRadius: 5,
+        },
         name: {
             fontSize: 20,
             fontWeight: 'bold',
@@ -145,6 +157,7 @@ const Card = ({ id, navigation }) => {
     return (
         <TouchableWithoutFeedback onPress={handleCardClick}>
             <View style={styles.card}>
+                <Text style={styles.order}>{id}</Text>
                 <Text style={styles.name}>{pokemon.name}</Text>
                 <Image
                     style={styles.img}

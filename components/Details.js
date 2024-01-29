@@ -7,7 +7,7 @@ import axios from 'axios';
 // Component
 
 const Details = ({ route, navigation }) => {
-    const { name, id } = route.params;
+    const { id } = route.params;
     const [pokemon, setPokemon] = useState([]);
 
 
@@ -47,7 +47,7 @@ const Details = ({ route, navigation }) => {
     // get API
     const getPokemonDetail = async () => {
         try {
-            const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+            const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
             setPokemon(response.data);
         } catch (error) {
             console.error(error);
