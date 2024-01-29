@@ -11,6 +11,7 @@ const Home = ({ navigation }) => {
 
     const [data, setData] = useState([]);
     const [pokemonList, setPokemonList] = useState([]);
+    const [nextPage, setNextPage] = useState('');
 
     const styles = StyleSheet.create({
         container: {
@@ -21,16 +22,24 @@ const Home = ({ navigation }) => {
     });
 
     // get API
-    const getLists = async () => {
+    const getLists = async (url) => {
         try {
             // debugger;
-            const response = await axios.get('https://pokeapi.co/api/v2/pokedex/1');
+            const response = await axios.get(url ? url : 'https://pokeapi.co/api/v2/pokemon');
             setData(response.data);
-            setPokemonList(response.data.pokemon_entries);
+            setPokemonList(response.data.results);
+            setNextPage(response.data.next);
         } catch (error) {
             console.error(error);
         }
     }
+
+    const getNextLists = async () => {
+        const response = await axios.get(nextPage);
+        setData(response.data);
+        setPokemonList([...pokemonList, ...response.data.results]);
+        setNextPage(response.data.next);
+    };
 
     useEffect(() => {
         getLists();
@@ -39,10 +48,11 @@ const Home = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <FlatList
+                onEndReached={getNextLists}
                 data={pokemonList}
                 numColumns={2}
-                renderItem={({ item }) =>
-                    <Card pokemon={item.pokemon_species} id={item.entry_number} navigation={navigation} />}
+                renderItem={({ item, index }) =>
+                    <Card id={index + 1} navigation={navigation} />}
             />
         </View>
     );

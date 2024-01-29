@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, Image, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import axios from 'axios';
 
 
-const Card = ({ pokemon, id, navigation }) => {
+const Card = ({ id, navigation }) => {
 
 
     const styles = StyleSheet.create({
@@ -36,14 +37,31 @@ const Card = ({ pokemon, id, navigation }) => {
         },
     });
 
+    // states
+    const [pokemon, setPokemon] = useState([]);
+
     const handleCardClick = () => {
         // setCurrentPokemon(pokemon);
         navigation.navigate('Accueil-Detail',
             {
-                name: pokemon.name,
                 id: id,
             })
     };
+
+    // get API
+    const getPokemon = async () => {
+        try {
+            const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
+            setPokemon(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        getPokemon();
+    }, []);
+
 
     return (
         <TouchableWithoutFeedback onPress={handleCardClick}>
