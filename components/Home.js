@@ -51,7 +51,7 @@ const Home = ({ navigation }) => {
                 onEndReached={getNextLists}
                 data={pokemonList}
                 numColumns={2}
-                renderItem={({ item, index }) =>
+                renderItem={({ index }) =>
                     <Card id={index + 1} navigation={navigation} />}
             />
         </View>
