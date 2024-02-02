@@ -17,7 +17,16 @@ const Home = ({ navigation }) => {
         container: {
             margin: 0,
             width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
             // flex: 1,
+            // backgroundColor: '#fafafa',
+        },
+        list: {
+            width: '100%',
+            // padding: 10,
         },
     });
 
@@ -48,9 +57,10 @@ const Home = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <FlatList
+                style={styles.list}
                 onEndReached={getNextLists}
                 data={pokemonList}
-                numColumns={2}
+                numColumns={1}
                 renderItem={({ index }) =>
                     <Card id={index + 1} navigation={navigation} />}
             />

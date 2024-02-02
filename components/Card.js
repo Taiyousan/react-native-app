@@ -8,54 +8,43 @@ const Card = ({ id, navigation }) => {
 
     const styles = StyleSheet.create({
         card: {
-            padding: 10,
             fontSize: 18,
             backgroundColor: '#fafafa',
-            borderColor: '#000000',
+            borderColor: 'red',
             borderWidth: 0,
             borderRadius: 5,
-            height: 300,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
-            flex: 1,
-            margin: 10,
+            height: 500,
+            margin: 20,
             shadowColor: "#000",
             shadowOpacity: 0.18,
             shadowRadius: 1.00,
 
             elevation: 1,
         },
+        infos: {
+            paddingLeft: 30,
+            gap: 10,
+        },
         order: {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            fontSize: 10,
-            fontWeight: 'bold',
-            color: '#fff',
-            backgroundColor: '#252525',
-            padding: 10,
-            borderTopRightRadius: 5,
-            borderBottomRightRadius: 5,
+            color: 'grey',
         },
         name: {
             fontSize: 20,
-            fontWeight: 'bold',
             color: '#252525',
-            width: '100%',
-            textAlign: 'center',
-            padding: 20,
-            textTransform: 'capitalize'
+            textTransform: 'capitalize',
         },
         img: {
-            width: 100,
-            height: 100,
+            // width: '100%',
+            height: '75%',
+            resizeMode: 'contain',
+            backgroundColor: '#fafafa',
+            borderWidth: 0,
+            borderColor: 'red',
         },
         types: {
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            gap: 10,
             width: '100%',
         },
         type: {
@@ -63,6 +52,9 @@ const Card = ({ id, navigation }) => {
             padding: 5,
             borderRadius: 5,
             textTransform: 'capitalize',
+            fontSize: 12,
+            width: 100,
+            textAlign: 'center',
         },
         grass: {
             backgroundColor: '#78C850',
@@ -157,7 +149,7 @@ const Card = ({ id, navigation }) => {
     return (
         <TouchableWithoutFeedback onPress={handleCardClick}>
             <View style={styles.card}>
-                <Text style={styles.order}>{id}</Text>
+                {/* 
                 <Text style={styles.name}>{pokemon.name}</Text>
                 <Image
                     style={styles.img}
@@ -166,7 +158,20 @@ const Card = ({ id, navigation }) => {
                 <View style={styles.types}>
                     <Text style={[styles.type, styles[type1]]}>{type1}</Text>
                     {type2 && <Text style={[styles.type, styles[type2]]}>{type2}</Text>}
+                </View> */}
+                <Image
+                    style={styles.img}
+                    source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png` }}
+                />
+                <View style={styles.infos}>
+                    <Text style={styles.order}>N° {id}</Text>
+                    <Text style={styles.name}>{pokemon.name}</Text>
+                    <View style={styles.types}>
+                        <Text style={[styles.type, styles[type1]]}>{type1}</Text>
+                        {type2 && <Text style={[styles.type, styles[type2]]}>{type2}</Text>}
+                    </View>
                 </View>
+
             </View>
         </TouchableWithoutFeedback>
     );
