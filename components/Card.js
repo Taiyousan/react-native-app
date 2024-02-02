@@ -34,12 +34,12 @@ const Card = ({ id, navigation }) => {
             textTransform: 'capitalize',
         },
         img: {
-            // width: '100%',
             height: '75%',
             resizeMode: 'contain',
-            backgroundColor: '#fafafa',
+            backgroundColor: '#f2f2f2',
             borderWidth: 0,
             borderColor: 'red',
+            marginBottom: 10,
         },
         types: {
             display: 'flex',
@@ -122,6 +122,10 @@ const Card = ({ id, navigation }) => {
         navigation.navigate('Accueil-Detail',
             {
                 id: id,
+                type1: type1,
+                type2: type2 ? type2 : null,
+                height: pokemon.height,
+                weight: pokemon.weight,
             })
     };
 
