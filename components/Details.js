@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Suspense } from 'react';
 import { colors } from '../utils/StylesSheet';
 import Card from './Card';
+import LoadingSpinner from './LoadingSpinner';
 
 
 
@@ -243,7 +244,7 @@ const Details = ({ route, navigation }) => {
 
 
     if (loading) {
-        return <Text>Loading...</Text>;
+        return <LoadingSpinner />;
     }
 
     return (

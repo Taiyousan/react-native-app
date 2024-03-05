@@ -2,26 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Pressable, Keyboard, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import Card from './Card';
-
-const LoadingSpinner = () => {
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            justifyContent: "center",
-            marginTop: 200,
-        },
-        horizontal: {
-            flexDirection: "row",
-            justifyContent: "space-around",
-            padding: 10
-        }
-    });
-    return (
-        <View style={[styles.container, styles.horizontal]}>
-            <ActivityIndicator size="large" color="grey" />
-        </View>
-    );
-};
+import LoadingSpinner from './LoadingSpinner';
 
 const Search = ({ navigation }) => {
     const styles = StyleSheet.create({
