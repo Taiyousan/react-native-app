@@ -139,7 +139,12 @@ const styles = StyleSheet.create({
         color: '#fff',
         maxWidth: '70%',
     },
-
+    evolutionsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        flexWrap: 'wrap',
+        gap: 10,
+    },
 });
 
 const Details = ({ route, navigation }) => {
@@ -302,7 +307,7 @@ const Details = ({ route, navigation }) => {
             </View>
 
             <Text style={styles.title}>Chaîne d'évolution</Text>
-            <View style={styles.generalInfos}>
+            <View style={[styles.generalInfos, styles.evolutionsContainer]}>
                 {evolutionChainIds.map((id) => (
                     <Card key={id} id={id} navigation={navigation} />
                 ))}

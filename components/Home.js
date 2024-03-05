@@ -60,7 +60,7 @@ const Home = ({ navigation }) => {
                 style={styles.list}
                 onEndReached={getNextLists}
                 data={pokemonList}
-                numColumns={1}
+                numColumns={2}
                 renderItem={({ index }) =>
                     <Card id={index + 1} navigation={navigation} scale={1} />}
             />

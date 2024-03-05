@@ -42,11 +42,15 @@ const Team = ({ navigation }) => {
 
 
     return (
-        <ScrollView style={styles.container}>
-            <View>{team.map((item) => (
+        <FlatList
+            style={styles.container}
+            data={team}
+            keyExtractor={(item) => item.id.toString()}
+            numColumns={2}
+            renderItem={({ item }) => (
                 <Card key={item.id} id={item.id} navigation={navigation} scale={0.5} />
-            ))}</View>
-        </ScrollView>
+            )}
+        />
     );
 };
 
