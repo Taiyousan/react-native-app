@@ -147,9 +147,17 @@ const Card = ({ id, navigation }) => {
     }
 
 
+
+
     useEffect(() => {
         getPokemon();
-    }, []);
+
+        return () => {
+            setPokemon([]);
+            setType1(null);
+            setType2(null);
+        }
+    }, [id]);
 
 
 
