@@ -9,7 +9,7 @@ import { colors } from '../utils/StylesSheet';
 // Component
 
 const Details = ({ route, navigation }) => {
-    const { id, type1, type2, height, weight } = route.params;
+    const { id, type1, type2, height, weight, talent, hiddenTalent } = route.params;
     const [pokemon, setPokemon] = useState([]);
     const [loading, setLoading] = useState(true); // initialisez à true
 
@@ -28,6 +28,7 @@ const Details = ({ route, navigation }) => {
             padding: 10,
             borderRadius: 10,
             gap: 10,
+            width: '95%',
         },
         title: {
             fontSize: 15,
@@ -45,6 +46,10 @@ const Details = ({ route, navigation }) => {
             fontSize: 12,
             textAlign: 'justify',
         },
+        textCapitalize: {
+            textTransform: 'capitalize',
+        },
+
         line: {
             flexDirection: "row",
             justifyContent: "space-between",
@@ -100,6 +105,7 @@ const Details = ({ route, navigation }) => {
             borderColor: 'black',
             padding: 5,
             borderRadius: 2,
+            textAlign: 'center',
         },
         scrollView: {
         },
@@ -182,14 +188,11 @@ const Details = ({ route, navigation }) => {
                 </View>
             </View>
 
-            {/* TEST */}
-            <Text style={styles.title}>Espèces</Text>
+
+            <Text style={styles.title}>Talents</Text>
             <View style={styles.generalInfos}>
-                <Text style={styles.textContainer}>{formatText(pokemon.flavor_text_entries.find(entry => entry.language.name === "fr").flavor_text)}</Text>
-                <View style={styles.line}>
-                    <Text style={styles.label}>Taille : {height / 10} m</Text>
-                    <Text style={styles.label}>Poids : {weight / 10} kg</Text>
-                </View>
+                <Text style={styles.label}>{talent.charAt(0).toUpperCase() + talent.slice(1)}</Text>
+                <Text style={styles.label}>{talent.charAt(0).toUpperCase() + hiddenTalent.slice(1)} (talent caché)</Text>
             </View>
 
         </ScrollView>

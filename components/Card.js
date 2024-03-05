@@ -126,6 +126,8 @@ const Card = ({ id, navigation }) => {
                 type2: type2 ? type2 : null,
                 height: pokemon.height,
                 weight: pokemon.weight,
+                talent: pokemon.abilities[0].ability.name,
+                hiddenTalent: pokemon.abilities[1] ? pokemon.abilities[1].ability.name : null,
             })
     };
 
