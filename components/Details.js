@@ -86,6 +86,20 @@ const Details = ({ route, navigation }) => {
             borderWidth: 0,
             borderColor: 'red',
         },
+        line: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            borderWidth: 0,
+            borderColor: 'red',
+        },
+        label: {
+            fontSize: 12,
+            color: '#252525',
+            borderWidth: .2,
+            borderColor: 'black',
+            padding: 5,
+            borderRadius: 2,
+        },
     });
 
     // get API
@@ -151,10 +165,10 @@ const Details = ({ route, navigation }) => {
             {/* Caractéristiques */}
             <Text style={styles.title}>Espèces</Text>
             <View style={styles.generalInfos}>
-                <Text style={styles.textContainer}>{formatText(pokemon.flavor_text_entries[0].flavor_text)}</Text>
+                <Text style={styles.textContainer}>{formatText(pokemon.flavor_text_entries.find(entry => entry.language.name === "fr").flavor_text)}</Text>
                 <View style={styles.line}>
-                    <Text>Taille : {height}</Text>
-                    <Text>Poids : {weight}</Text>
+                    <Text style={styles.label}>Taille : {height / 10} m</Text>
+                    <Text style={styles.label}>Poids : {weight / 10} kg</Text>
                 </View>
             </View>
 
