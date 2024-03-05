@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, FlatList, Text, StyleSheet, Image, ScrollView, Pressable } from 'react-native';
 import axios from 'axios';
 import { Suspense } from 'react';
 import { colors } from '../utils/StylesSheet';
 import Card from './Card';
 import LoadingSpinner from './LoadingSpinner';
+import Storage from 'react-native-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+
 
 
 
@@ -145,6 +150,15 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         gap: 10,
     },
+    button: {
+        backgroundColor: '#fff',
+        padding: 10,
+        borderRadius: 5,
+        margin: 10,
+    },
+    buttonText: {
+        color: '#000',
+    },
 });
 
 const Details = ({ route, navigation }) => {
@@ -153,6 +167,7 @@ const Details = ({ route, navigation }) => {
     const [loading, setLoading] = useState(true);
     const [evolutionChain, setEvolutionChain] = useState([]);
     const [evolutionChainIds, setEvolutionChainIds] = useState([]);
+    const [canAddToTeam, setCanAddToTeam] = useState(true);
     const scrollViewRef = React.useRef();
     // initialisez à true
 
@@ -214,13 +229,92 @@ const Details = ({ route, navigation }) => {
     function formatText(text) {
         return text.replace(/\n/g, " ");
     }
-    ////////  ------- on mounted
-    ////// --------
+
+    // TEAM ----------------------------------------------------------------
+    const storeTeam = async (key, newValue) => {
+        try {
+            const existingValue = await AsyncStorage.getItem(key);
+            let updatedValue = [];
+
+            if (existingValue !== null) {
+                updatedValue = JSON.parse(existingValue);
+
+                if (updatedValue.length >= 6) {
+                    console.error('Erreur de stockage : Le tableau contient déjà 6 valeurs');
+                    return;
+                }
+
+                if (updatedValue.includes(newValue)) {
+                    console.error('Erreur de stockage : La valeur existe déjà dans le tableau');
+                    return;
+                }
+
+                updatedValue.push(newValue);
+                setCanAddToTeam(false);
+            } else {
+                updatedValue = [newValue];
+            }
+
+            await AsyncStorage.setItem(key, JSON.stringify(updatedValue));
+        } catch (error) {
+            console.error('Erreur de stockage :', error);
+        }
+    };
+
+    const getTeam = async (key) => {
+        try {
+            const jsonValue = await AsyncStorage.getItem(key);
+
+            if (jsonValue === null) {
+                return [];
+            }
+            const team = JSON.parse(jsonValue);
+            if (team.includes(id)) {
+                setCanAddToTeam(false);
+            } else {
+                setCanAddToTeam(true);
+            }
+            return team;
+        } catch (error) {
+            console.error('Erreur de récupération de données :', error);
+            return [];
+        }
+    };
+
+    const removeFromTeam = async (key, valueToRemove) => {
+        try {
+            // Récupérer le tableau depuis AsyncStorage en utilisant la clé
+            const existingValue = await AsyncStorage.getItem(key);
+
+            // Si la valeur est null, il n'y a rien à retirer
+            if (existingValue === null) {
+                console.warn('Le tableau est vide. Aucune action n\'a été effectuée.');
+                return;
+            }
+
+            // Parser la valeur JSON en JavaScript
+            let updatedValue = JSON.parse(existingValue);
+
+            // Retirer la valeur spécifique du tableau
+            updatedValue = updatedValue.filter(item => item !== valueToRemove);
+
+            // Sauvegarder le tableau mis à jour dans AsyncStorage
+            await AsyncStorage.setItem(key, JSON.stringify(updatedValue));
+            setCanAddToTeam(true);
+        } catch (error) {
+            console.error('Erreur de suppression de données :', error);
+        }
+    };
 
     ///// useEFFECT
     useEffect(() => {
-        getPokemonDetail();
-        scrollToTop();
+        const start = async () => {
+            await getPokemonDetail();
+            scrollToTop();
+            console.log(await getTeam('team'));
+        };
+
+        start();
     }, [route.params]);
 
     function getEnglishGenus(genera) {
@@ -258,9 +352,28 @@ const Details = ({ route, navigation }) => {
             contentContainerStyle={styles.contentContainer}
             ref={scrollViewRef}>
 
+            {/* Ajouter à la team */}
+            {canAddToTeam ? (
+                <Pressable
+                    onPress={() => {
+                        storeTeam('team', id);
+                    }}
+                    style={styles.button}
+                >
+                    <Text style={styles.buttonText}>Ajouter à l'équipe</Text>
+                </Pressable>
+            ) : (
+                <Pressable
+                    onPress={() => {
+                        removeFromTeam('team', id);
+                    }}
+                    style={styles.button}
+                >
+                    <Text style={styles.buttonText}>Retirer de l'équipe</Text>
+                </Pressable>
+            )}
             {/* Image */}
-            <View style={styles.imgContainer}
-            >
+            <View style={styles.imgContainer}>
                 <Image
                     style={styles.img}
                     source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png` }}
@@ -314,7 +427,7 @@ const Details = ({ route, navigation }) => {
             </View>
 
 
-        </ScrollView>
+        </ScrollView >
     );
 };
 
