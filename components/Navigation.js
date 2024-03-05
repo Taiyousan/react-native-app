@@ -16,7 +16,7 @@ function HomeStack() {
     return (
         <Stack.Navigator>
             <Stack.Screen name="Accueil-Accueil" component={Home} />
-            <Stack.Screen name="Accueil-Detail" component={Details} initialParams={{ test: "yourValue" }} />
+            <Stack.Screen name="Accueil-Detail" component={Details} />
         </Stack.Navigator>
     );
 }

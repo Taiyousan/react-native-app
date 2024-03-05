@@ -11,25 +11,44 @@ const Home = ({ navigation }) => {
 
     const [data, setData] = useState([]);
     const [pokemonList, setPokemonList] = useState([]);
+    const [nextPage, setNextPage] = useState('');
 
     const styles = StyleSheet.create({
         container: {
             margin: 0,
             width: '100%',
-            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            // flex: 1,
+            // backgroundColor: '#fafafa',
+        },
+        list: {
+            width: '100%',
+            // padding: 10,
         },
     });
 
     // get API
-    const getLists = async () => {
+    const getLists = async (url) => {
         try {
-            const response = await axios.get('https://pokeapi.co/api/v2/pokedex/1');
+            // debugger;
+            const response = await axios.get(url ? url : 'https://pokeapi.co/api/v2/pokemon');
             setData(response.data);
-            setPokemonList(response.data.pokemon_entries);
+            setPokemonList(response.data.results);
+            setNextPage(response.data.next);
         } catch (error) {
             console.error(error);
         }
     }
+
+    const getNextLists = async () => {
+        const response = await axios.get(nextPage);
+        setData(response.data);
+        setPokemonList([...pokemonList, ...response.data.results]);
+        setNextPage(response.data.next);
+    };
 
     useEffect(() => {
         getLists();
@@ -38,10 +57,12 @@ const Home = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <FlatList
+                style={styles.list}
+                onEndReached={getNextLists}
                 data={pokemonList}
-                numColumns={2}
-                renderItem={({ item }) =>
-                    <Card pokemon={item.pokemon_species} id={item.entry_number} navigation={navigation} />}
+                numColumns={1}
+                renderItem={({ index }) =>
+                    <Card id={index + 1} navigation={navigation} />}
             />
         </View>
     );
