@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Text, StyleSheet, Image } from 'react-native';
+import { View, FlatList, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import axios from 'axios';
 import { Suspense } from 'react';
 import { colors } from '../utils/StylesSheet';
@@ -19,6 +19,7 @@ const Details = ({ route, navigation }) => {
             margin: 0,
             width: '100%',
             flex: 1,
+            paddingBottom: 500,
             // backgroundColor: pokemon.color.name,
         },
         generalInfos: {
@@ -100,6 +101,14 @@ const Details = ({ route, navigation }) => {
             padding: 5,
             borderRadius: 2,
         },
+        scrollView: {
+        },
+        contentContainer: {
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingTop: 50,
+            paddingBottom: 150
+        }
     });
 
     // get API
@@ -137,7 +146,8 @@ const Details = ({ route, navigation }) => {
     }
 
     return (
-        <View style={[styles.container, colors[type1]]}>
+        <ScrollView style={[styles.scrollView, colors[type1]]}
+            contentContainerStyle={styles.contentContainer}>
 
             {/* Image */}
             <View style={styles.imgContainer}
@@ -172,7 +182,17 @@ const Details = ({ route, navigation }) => {
                 </View>
             </View>
 
-        </View>
+            {/* TEST */}
+            <Text style={styles.title}>Espèces</Text>
+            <View style={styles.generalInfos}>
+                <Text style={styles.textContainer}>{formatText(pokemon.flavor_text_entries.find(entry => entry.language.name === "fr").flavor_text)}</Text>
+                <View style={styles.line}>
+                    <Text style={styles.label}>Taille : {height / 10} m</Text>
+                    <Text style={styles.label}>Poids : {weight / 10} kg</Text>
+                </View>
+            </View>
+
+        </ScrollView>
     );
 };
 
