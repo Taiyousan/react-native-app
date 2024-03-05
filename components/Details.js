@@ -3,6 +3,7 @@ import { View, FlatList, Text, StyleSheet, Image, ScrollView } from 'react-nativ
 import axios from 'axios';
 import { Suspense } from 'react';
 import { colors } from '../utils/StylesSheet';
+import Card from './Card';
 
 
 
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     },
     imgContainer: {
         // width: '100%',
-        height: '50%',
+        height: 350,
         resizeMode: 'contain',
         borderWidth: 0,
         borderColor: 'red',
@@ -106,7 +107,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 50,
-        paddingBottom: 150
+        paddingBottom: 250
+        // height: 'fit-content',
     },
     stat: {
         flexDirection: 'row',
@@ -134,6 +136,7 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         opacity: 0.9,
         color: '#fff',
+        maxWidth: '70%',
     },
 
 });
@@ -141,24 +144,78 @@ const styles = StyleSheet.create({
 const Details = ({ route, navigation }) => {
     const { id, type1, type2, height, weight, talent, hiddenTalent, stats } = route.params;
     const [pokemon, setPokemon] = useState([]);
-    const [loading, setLoading] = useState(true); // initialisez à true
+    const [loading, setLoading] = useState(true);
+    const [evolutionChain, setEvolutionChain] = useState([]);
+    const [evolutionChainIds, setEvolutionChainIds] = useState([]);
+    const scrollViewRef = React.useRef();
+    // initialisez à true
 
-    // get API
+    // API
     const getPokemonDetail = async () => {
         try {
             const response = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
             setPokemon(response.data);
+
+            if (response.data.evolution_chain) {
+                await getEvolutionChain(response.data.evolution_chain.url);
+                // console.log(response.data.evolution_chain.url);
+            }
         } catch (error) {
             console.error(error);
-        } finally {
-            setLoading(false); // mettez à jour l'état loading une fois la requête terminée
+        } finally {// mettez à jour l'état loading une fois la requête terminée
+            setLoading(false);
         }
     };
 
+    const getEvolutionChain = async (url) => {
+        try {
+            const response = await axios.get(url);
+            const evolutionChain = response.data.chain;
+            const speciesIds = [];
+
+            speciesIds.push(getIdFromUrl(evolutionChain.species.url));
+
+            for (const evolveTo of evolutionChain.evolves_to) {
+                speciesIds.push(getIdFromUrl(evolveTo.species.url));
+
+                for (const secondEvolveTo of evolveTo.evolves_to) {
+                    speciesIds.push(getIdFromUrl(secondEvolveTo.species.url));
+                }
+            }
+
+            setEvolutionChainIds(speciesIds);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    // functions
+    const getIdFromUrl = (url) => {
+        const urlParts = url.split("/");
+        return urlParts[urlParts.length - 2];
+    };
+
+    const scrollToTop = () => {
+        if (scrollViewRef.current) {
+            scrollViewRef.current.scrollTo({ y: 0, animated: true });
+        }
+    };
+
+    function formatText(text) {
+        return text.replace(/\n/g, " ");
+    }
+    ////////  ------- on mounted
     useEffect(() => {
         getPokemonDetail();
     }, []);
 
+
+
+    scrollToTop();
+    ////// --------
 
     function getEnglishGenus(genera) {
         console.log(genera);
@@ -166,9 +223,7 @@ const Details = ({ route, navigation }) => {
         // return englishGenus ? englishGenus.genus : "";
     }
 
-    function formatText(text) {
-        return text.replace(/\n/g, " ");
-    }
+
 
 
 
@@ -178,8 +233,10 @@ const Details = ({ route, navigation }) => {
     }
 
     return (
-        <ScrollView style={[styles.scrollView, colors[type1]]}
-            contentContainerStyle={styles.contentContainer}>
+        <ScrollView
+            style={[styles.scrollView, colors[type1]]}
+            contentContainerStyle={styles.contentContainer}
+            ref={scrollViewRef}>
 
             {/* Image */}
             <View style={styles.imgContainer}
@@ -218,7 +275,7 @@ const Details = ({ route, navigation }) => {
             <Text style={styles.title}>Talents</Text>
             <View style={styles.generalInfos}>
                 <Text style={styles.label}>{talent.charAt(0).toUpperCase() + talent.slice(1)}</Text>
-                <Text style={styles.label}>{talent.charAt(0).toUpperCase() + hiddenTalent.slice(1)} (talent caché)</Text>
+                {hiddenTalent && <Text style={styles.label}>{talent.charAt(0).toUpperCase() + hiddenTalent.slice(1)} (talent caché)</Text>}
             </View>
 
             <Text style={styles.title}>Statistiques</Text>
@@ -226,6 +283,13 @@ const Details = ({ route, navigation }) => {
 
                 {stats.map((stat, index) => (
                     <StatComponent key={index} item={stat} type1={type1} />
+                ))}
+            </View>
+
+            <Text style={styles.title}>Chaîne d'évolution</Text>
+            <View style={styles.generalInfos}>
+                {evolutionChainIds.map((id) => (
+                    <Card key={id} id={id} navigation={navigation} />
                 ))}
             </View>
 
