@@ -86,7 +86,7 @@ const Search = ({ navigation }) => {
                 <Text style={styles.buttonText}>RECHERCHER</Text>
             </Pressable>
             {isLoading && <LoadingSpinner />}
-            {resultId ? <Card id={resultId} navigation={navigation} /> : null}
+            {resultId ? <Card id={resultId} navigation={navigation} scale={0.8} /> : null}
             {!isLoading && !resultId && isError && (
                 <View style={styles.errorContainer}>
                     <Text style={styles.error}>Le Pokémon n'existe pas.</Text>

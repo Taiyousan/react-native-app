@@ -3,7 +3,7 @@ import { View, FlatList, Text, Image, StyleSheet, TouchableWithoutFeedback } fro
 import axios from 'axios';
 
 
-const Card = ({ id, navigation }) => {
+const Card = ({ id, navigation, scale }) => {
 
 
     const styles = StyleSheet.create({
@@ -18,7 +18,7 @@ const Card = ({ id, navigation }) => {
             shadowColor: "#000",
             shadowOpacity: 0.18,
             shadowRadius: 1.00,
-
+            transform: [{ scale: scale }],
             elevation: 1,
         },
         infos: {

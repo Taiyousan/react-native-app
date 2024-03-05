@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Text, StyleSheet } from 'react-native';
+import { View, FlatList, Text, StyleSheet, ScrollView } from 'react-native';
 import Card from './Card';
 import axios from 'axios';
 
@@ -12,6 +12,8 @@ const Team = ({ navigation }) => {
             margin: 0,
             width: '100%',
             flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
         },
     });
 
@@ -40,11 +42,11 @@ const Team = ({ navigation }) => {
 
 
     return (
-        <View style={styles.container}>
-            {team.map((item) => (
-                <Card key={item.id} id={item.id} navigation={navigation} />
-            ))}
-        </View>
+        <ScrollView style={styles.container}>
+            <View>{team.map((item) => (
+                <Card key={item.id} id={item.id} navigation={navigation} scale={0.5} />
+            ))}</View>
+        </ScrollView>
     );
 };
 

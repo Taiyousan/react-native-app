@@ -62,7 +62,7 @@ const Home = ({ navigation }) => {
                 data={pokemonList}
                 numColumns={1}
                 renderItem={({ index }) =>
-                    <Card id={index + 1} navigation={navigation} />}
+                    <Card id={index + 1} navigation={navigation} scale={1} />}
             />
         </View>
     );
