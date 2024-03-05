@@ -152,6 +152,7 @@ const Details = ({ route, navigation }) => {
 
     // API
     const getPokemonDetail = async () => {
+        setLoading(true);
         try {
             const response = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
             setPokemon(response.data);
@@ -208,14 +209,13 @@ const Details = ({ route, navigation }) => {
         return text.replace(/\n/g, " ");
     }
     ////////  ------- on mounted
+    ////// --------
+
+    ///// useEFFECT
     useEffect(() => {
         getPokemonDetail();
-    }, []);
-
-
-
-    scrollToTop();
-    ////// --------
+        scrollToTop();
+    }, [route.params]);
 
     function getEnglishGenus(genera) {
         console.log(genera);
@@ -224,6 +224,20 @@ const Details = ({ route, navigation }) => {
     }
 
 
+    // clean up
+    const cleanUp = () => {
+        setPokemon([]);
+        setEvolutionChain([]);
+        setEvolutionChainIds([]);
+        setLoading(true);
+    }
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('blur', () => {
+            cleanUp();
+        });
+
+        return unsubscribe;
+    }, [navigation]);
 
 
 
