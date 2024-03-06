@@ -183,7 +183,6 @@ const Details = ({ route, navigation }) => {
 
             if (response.data.evolution_chain) {
                 await getEvolutionChain(response.data.evolution_chain.url);
-                // console.log(response.data.evolution_chain.url);
             }
         } catch (error) {
             console.error(error);
@@ -279,13 +278,10 @@ const Details = ({ route, navigation }) => {
             }
             const team = JSON.parse(jsonValue);
             if (team.includes(id.toString())) {
-                console.log('Le Pokémon est déjà dans l\'équipe', id.toString());
                 setCanAddToTeam(false);
             } else {
-                console.log('Le Pokémon n\'est pas dans l\'équipe', id.toString());
                 setCanAddToTeam(true);
             }
-            console.log('team', team);
             return team;
         } catch (error) {
             console.error('Erreur de récupération de données :', error);
@@ -323,7 +319,6 @@ const Details = ({ route, navigation }) => {
     useEffect(() => {
         const start = async () => {
 
-            console.log('okokoko');
             await getPokemonDetail();
             scrollToTop();
             getTeam('team');
@@ -331,11 +326,9 @@ const Details = ({ route, navigation }) => {
         };
 
         start();
-        console.log('id', id);
     }, [id]);
 
     function getEnglishGenus(genera) {
-        console.log(genera);
         // const englishGenus = genera.find((genus) => genus.language.name === "en");
         // return englishGenus ? englishGenus.genus : "";
     }
