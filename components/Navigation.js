@@ -1,5 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
+
 
 import Home from './Home';
 import Search from './Search';
@@ -24,7 +26,7 @@ function HomeStack() {
 function TeamStack() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Équipe" component={Team} />
+            <Stack.Screen name="Mon équipe" component={Team} />
             <Stack.Screen name="Détail" component={Details} />
         </Stack.Navigator>
     );
@@ -36,10 +38,42 @@ function TeamStack() {
 function Tabs() {
     return (
         <Tab.Navigator>
-            <Tab.Screen name="Pokédex" component={HomeStack} />
-            <Tab.Screen name="Recherche" component={Search} />
-            <Tab.Screen name="Équipe" component={TeamStack} />
-            <Tab.Screen name="Paramètres" component={Settings} />
+            <Tab.Screen
+                name="Pokédex"
+                component={HomeStack}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="md-home" size={size} color={color} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Recherche"
+                component={Search}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="md-search" size={size} color={color} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Équipe"
+                component={TeamStack}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="md-people" size={size} color={color} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Paramètres"
+                component={Settings}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="md-settings" size={size} color={color} />
+                    ),
+                }}
+            />
         </Tab.Navigator>
     );
 }
