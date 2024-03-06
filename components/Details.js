@@ -8,6 +8,8 @@ import Card from './Card';
 import LoadingSpinner from './LoadingSpinner';
 import Storage from 'react-native-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
+
 
 
 
@@ -241,7 +243,12 @@ const Details = ({ route, navigation }) => {
                 updatedValue = JSON.parse(existingValue);
 
                 if (updatedValue.length >= 6) {
-                    console.error('Erreur de stockage : Le tableau contient déjà 6 valeurs');
+                    Alert.alert(
+                        'Équipe pleine !',
+                        'Supprimez un Pokémon de votre équipe pour en ajouter un nouveau.',
+                        [{ text: 'OK', onPress: () => console.log('OK Pressed') }
+                        ]
+                    );
                     return;
                 }
 
