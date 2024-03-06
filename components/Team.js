@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, StyleSheet, ScrollView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native'; // Importer useFocusEffect
 import Card from './Card';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Components
 
 const Team = ({ navigation }) => {
-
     const styles = StyleSheet.create({
         container: {
             margin: 0,
@@ -19,7 +20,16 @@ const Team = ({ navigation }) => {
 
     // states and variables
     const [team, setTeam] = useState([]);
-    const pokemonIds = [1, 2, 3, 4, 5, 6];
+
+    const getIds = async (key) => {
+        try {
+            const jsonValue = await AsyncStorage.getItem(key);
+            return jsonValue ? JSON.parse(jsonValue) : [];
+        } catch (error) {
+            console.error('Erreur de récupération de données :', error);
+            return [];
+        }
+    };
 
     const getTeam = async (ids) => {
         try {
@@ -30,22 +40,36 @@ const Team = ({ navigation }) => {
             const pokemonDetails = responses.map(response => response.data);
             setTeam(pokemonDetails);
         } catch (error) {
-            console.error('Error fetching pokemons:', error);
+            console.error('Erreur lors de la récupération des Pokémon:', error);
         }
     };
 
+    const cleanUp = () => {
+        setTeam([]);
+    };
 
     useEffect(() => {
-        getTeam(pokemonIds);
+        // Récupérer les IDs depuis la mémoire locale
+        getIds('team').then(ids => {
+            // Effectuer les requêtes API pour obtenir les détails des Pokémon correspondants
+            getTeam(ids);
+        });
     }, []);
 
-
+    useFocusEffect( // Utiliser useFocusEffect pour relancer l'effet à chaque fois que l'écran est focalisé
+        React.useCallback(() => {
+            getIds('team').then(ids => {
+                getTeam(ids);
+            });
+            return cleanUp; // Nettoyer lorsque l'effet est nettoyé
+        }, [])
+    );
 
     return (
         <FlatList
             style={styles.container}
             data={team}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.id}
             numColumns={2}
             renderItem={({ item }) => (
                 <Card key={item.id} id={item.id} navigation={navigation} scale={0.5} />

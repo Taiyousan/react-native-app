@@ -126,7 +126,7 @@ const Card = ({ id, navigation, scale }) => {
 
     const handleCardClick = () => {
         // setCurrentPokemon(pokemon);
-        navigation.navigate('Accueil-Detail',
+        navigation.navigate('Fiche Pokémon',
             {
                 id: id,
                 type1: type1,

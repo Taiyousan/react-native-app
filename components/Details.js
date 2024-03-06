@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, StyleSheet, Image, ScrollView, Pressable } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native'; // Importer useFocusEffect
 import axios from 'axios';
 import { Suspense } from 'react';
 import { colors } from '../utils/StylesSheet';
@@ -244,15 +245,15 @@ const Details = ({ route, navigation }) => {
                     return;
                 }
 
-                if (updatedValue.includes(newValue)) {
+                if (updatedValue.includes(newValue.toString())) { // Convertir newValue en chaîne de caractères
                     console.error('Erreur de stockage : La valeur existe déjà dans le tableau');
                     return;
                 }
 
-                updatedValue.push(newValue);
+                updatedValue.push(newValue.toString()); // Convertir newValue en chaîne de caractères
                 setCanAddToTeam(false);
             } else {
-                updatedValue = [newValue];
+                updatedValue = [newValue.toString()]; // Convertir newValue en chaîne de caractères
             }
 
             await AsyncStorage.setItem(key, JSON.stringify(updatedValue));
@@ -260,6 +261,7 @@ const Details = ({ route, navigation }) => {
             console.error('Erreur de stockage :', error);
         }
     };
+
 
     const getTeam = async (key) => {
         try {
@@ -269,11 +271,14 @@ const Details = ({ route, navigation }) => {
                 return [];
             }
             const team = JSON.parse(jsonValue);
-            if (team.includes(id)) {
+            if (team.includes(id.toString())) {
+                console.log('Le Pokémon est déjà dans l\'équipe', id.toString());
                 setCanAddToTeam(false);
             } else {
+                console.log('Le Pokémon n\'est pas dans l\'équipe', id.toString());
                 setCanAddToTeam(true);
             }
+            console.log('team', team);
             return team;
         } catch (error) {
             console.error('Erreur de récupération de données :', error);
@@ -282,6 +287,7 @@ const Details = ({ route, navigation }) => {
     };
 
     const removeFromTeam = async (key, valueToRemove) => {
+        valueToRemove = valueToRemove.toString(); // Convertir valueToRemove en chaîne de caractères
         try {
             // Récupérer le tableau depuis AsyncStorage en utilisant la clé
             const existingValue = await AsyncStorage.getItem(key);
@@ -306,22 +312,27 @@ const Details = ({ route, navigation }) => {
         }
     };
 
-    ///// useEFFECT
+
     useEffect(() => {
         const start = async () => {
+
+            console.log('okokoko');
             await getPokemonDetail();
             scrollToTop();
-            console.log(await getTeam('team'));
+            getTeam('team');
+
         };
 
         start();
-    }, [route.params]);
+        console.log('id', id);
+    }, [id]);
 
     function getEnglishGenus(genera) {
         console.log(genera);
         // const englishGenus = genera.find((genus) => genus.language.name === "en");
         // return englishGenus ? englishGenus.genus : "";
     }
+
 
 
     // clean up

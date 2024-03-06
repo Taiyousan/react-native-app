@@ -12,24 +12,37 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
+
 function HomeStack() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Accueil-Accueil" component={Home} />
-            <Stack.Screen name="Accueil-Detail" component={Details} />
+            <Stack.Screen name="Parcourir le Pokédex" component={Home} />
+            <Stack.Screen name="Fiche Pokémon" component={Details} />
+        </Stack.Navigator>
+    );
+}
+function TeamStack() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen name="Équipe" component={Team} />
+            <Stack.Screen name="Détail" component={Details} />
         </Stack.Navigator>
     );
 }
 
+
+
+
 function Tabs() {
     return (
         <Tab.Navigator>
-            <Tab.Screen name="Accueil" component={HomeStack} />
-            <Tab.Screen name="Search" component={Search} />
-            <Tab.Screen name="Team" component={Team} />
-            <Tab.Screen name="Settings" component={Settings} />
+            <Tab.Screen name="Pokédex" component={HomeStack} />
+            <Tab.Screen name="Recherche" component={Search} />
+            <Tab.Screen name="Équipe" component={TeamStack} />
+            <Tab.Screen name="Paramètres" component={Settings} />
         </Tab.Navigator>
     );
 }
+
 
 export default Tabs;
