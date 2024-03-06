@@ -336,19 +336,19 @@ const Details = ({ route, navigation }) => {
 
 
     // clean up
-    const cleanUp = () => {
-        setPokemon([]);
-        setEvolutionChain([]);
-        setEvolutionChainIds([]);
-        setLoading(true);
-    }
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('blur', () => {
-            cleanUp();
-        });
+    // const cleanUp = () => {
+    //     setPokemon([]);
+    //     setEvolutionChain([]);
+    //     setEvolutionChainIds([]);
+    //     setLoading(true);
+    // }
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('blur', () => {
+    //         cleanUp();
+    //     });
 
-        return unsubscribe;
-    }, [navigation]);
+    //     return unsubscribe;
+    // }, [navigation]);
 
 
 
